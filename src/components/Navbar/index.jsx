@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/joy";
 import ColorSchemeToggle from "../../ColorSchemeToggle";
-import SignOut from "../SignOut";
+import SignOut from "../Signout";
 
 export default function Navbar({ user }) {
   return (
