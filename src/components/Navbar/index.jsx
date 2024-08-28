@@ -18,7 +18,7 @@ export default function Navbar({ user }) {
       }}
     >
       <Typography level="h4" sx={{ fontSize: 24 }}>
-        Chat Room
+        WANG BO QI
       </Typography>
       <Stack direction="row" spacing={2} alignItems="center">
         <ColorSchemeToggle />

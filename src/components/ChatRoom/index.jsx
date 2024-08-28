@@ -9,11 +9,13 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { auth, firestore } from "../../firebase/firebase"; // Correct Import
+import { auth, firestore } from "../../firebase/firebase";
+import { useColorScheme } from "@mui/joy/styles";
 
 export default function ChatRoom() {
+  const { mode } = useColorScheme(); // Get current color scheme mode (light/dark)
   const dummy = useRef();
-  const messagesRef = collection(firestore, "messages"); // Use Firestore instance
+  const messagesRef = collection(firestore, "messages");
   const q = query(messagesRef, orderBy("createdAt"), limit(25));
 
   const [messages] = useCollectionData(q, { idField: "id" });
@@ -46,7 +48,7 @@ export default function ChatRoom() {
           height: "80vh",
           overflowY: "auto",
           padding: 2,
-          backgroundColor: "#f4f4f9",
+          backgroundColor: mode === "dark" ? "#2c2c2c" : "#f4f4f9", // Adjust background color based on mode
           borderRadius: "8px",
           boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
         }}
@@ -64,7 +66,12 @@ export default function ChatRoom() {
               value={formValue}
               onChange={(e) => setFormValue(e.target.value)}
               placeholder="Type your message..."
-              sx={{ flexGrow: 1, backgroundColor: "#fff", borderRadius: "8px" }}
+              sx={{
+                flexGrow: 1,
+                backgroundColor: mode === "dark" ? "#1e1e1e" : "#fff",
+                color: mode === "dark" ? "#fff" : "#000",
+                borderRadius: "8px",
+              }}
             />
             <Button
               type="submit"
@@ -85,6 +92,7 @@ export default function ChatRoom() {
 function ChatMessage({ message }) {
   const { text, uid, photoURL } = message;
   const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
+  const { mode } = useColorScheme(); // Get current color scheme mode (light/dark)
 
   return (
     <Stack
@@ -103,8 +111,20 @@ function ChatMessage({ message }) {
       />
       <Typography
         sx={{
-          backgroundColor: messageClass === "sent" ? "#1976d2" : "#e0e0e0",
-          color: messageClass === "sent" ? "#fff" : "#000",
+          backgroundColor:
+            messageClass === "sent"
+              ? mode === "dark"
+                ? "#0057d9"
+                : "#1976d2"
+              : mode === "dark"
+              ? "#424242"
+              : "#e0e0e0",
+          color:
+            messageClass === "sent"
+              ? "#fff"
+              : mode === "dark"
+              ? "#fff"
+              : "#000",
           padding: 1.5,
           borderRadius: "8px",
           maxWidth: "75%",
